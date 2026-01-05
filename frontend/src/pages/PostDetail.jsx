@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import API from "../services/api";
 
 function PostDetail() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://127.0.0.1:8000/api/posts/${id}/`)
-      .then(res => setPost(res.data))
-      .catch(err => console.error(err));
+    API.get(`posts/${id}/`)
+      .then((res) => setPost(res.data))
+      .catch(() => alert("Post not found"));
   }, [id]);
 
   if (!post) return <p>Loading...</p>;
 
   return (
     <div>
-      <h1>{post.title}</h1>
+      <h2>{post.title}</h2>
       <p>{post.content}</p>
-      <small>Author ID: {post.author}</small>
+      <small className="text-muted">Author: {post.author_username}</small>
     </div>
   );
 }

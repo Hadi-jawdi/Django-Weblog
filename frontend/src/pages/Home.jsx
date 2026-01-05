@@ -1,29 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import API from "../services/api";
+import { Link } from "react-router-dom";
 
 function Home() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/posts/')
-      .then(res => setPosts(res.data))
-      .catch(err => console.error(err));
+    API.get("posts/")
+      .then((res) => setPosts(res.data))
+      .catch(() => alert("Error loading posts"));
   }, []);
 
   return (
     <div>
-      <h1>All Posts</h1>
-      {posts.length === 0 && <p>No posts available.</p>}
-      {posts.map(post => (
-        <div key={post.id} className="card mb-3">
-          <div className="card-body">
-            <h5 className="card-title">{post.title}</h5>
-            <p className="card-text">{post.content.substring(0, 100)}...</p>
-            <Link to={`/post/${post.id}`} className="btn btn-primary">Read More</Link>
+      <h2>Latest Posts</h2>
+
+      <div className="row">
+        {posts.map((post) => (
+          <div key={post.id} className="col-md-4 mb-3">
+            <div className="card h-100">
+              <div className="card-body">
+                <h5>{post.title}</h5>
+                <p>{post.content.substring(0, 80)}...</p>
+                <Link to={`/post/${post.id}`} className="btn btn-primary btn-sm">
+                  Read More
+                </Link>
+              </div>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
